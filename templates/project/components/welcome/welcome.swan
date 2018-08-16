@@ -1,0 +1,3 @@
+<view class="swan-welcome-wrapper">
+    welcome, \{{author}}!
+</view>

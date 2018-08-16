@@ -1,0 +1,6 @@
+{
+    "navigationBarTitleText": "示例页面",
+    "usingComponents": {
+        "custom-component": "/components/welcome/welcome"
+    }
+}

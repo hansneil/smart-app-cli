@@ -1,0 +1,5 @@
+<view class="swan-wrapper">
+    <image class="swan-logo" src="\{{logo}}"></image>
+    <view class="swan-slogan">\{{slogan}}</view>
+    <custom-component></custom-component>
+</view>

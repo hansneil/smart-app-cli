@@ -1,0 +1,23 @@
+/**
+ * @file index.css
+ * @author {{author}}
+ */
+
+.swan-wrapper {
+    height: 100vh;
+    background-color: #fff;
+    text-align: center;
+}
+
+.swan-logo {
+    margin-top: 25vh;
+    width: 180rpx;
+    height: 180rpx;
+}
+
+.swan-slogan {
+    font-size: 64rpx;
+    font-weight: 300;
+    letter-spacing: 10px;
+    color: #3d76ff;
+}

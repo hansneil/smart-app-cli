@@ -1,0 +1,11 @@
+/**
+ * @file welcome.js
+ * @author {{author}}
+ */
+
+.swan-welcome-wrapper {
+    margin-top: 30rpx;
+    font-size: 32rpx;
+    font-weight: 300;
+    color: #333;
+}
