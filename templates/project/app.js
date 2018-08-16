@@ -1,6 +1,6 @@
 /**
  * @file app.js
- * @author {{author}}
+ * @author {{author}} <{{email}}>
  */
 
 /* eslint-disable babel/new-cap */

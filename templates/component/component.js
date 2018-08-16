@@ -1,5 +1,5 @@
 /**
- * @file welcome.js
+ * @file {{filename}}.js
  * @author {{author}} <{{email}}>
  */
 
@@ -7,14 +7,13 @@
 Component({
 /* eslint-enable babel/new-cap */
     properties: {
-        author: {
-            type: String,
-            value: '{{author}}'
-        }
+        // component properties
     },
+
     data: {
         // component data
     },
+
     methods: {
         // component methods
     }

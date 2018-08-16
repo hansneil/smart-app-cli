@@ -1,6 +1,6 @@
 /**
  * @file index.js
- * @author {{author}}
+ * @author {{author}} <{{email}}>
  */
 
 /* eslint-disable babel/new-cap */
@@ -20,6 +20,6 @@ Page({
         return {
             title: '{{appName}}',
             content: '世界很复杂，百度更懂你'
-        }
+        };
     }
 });
