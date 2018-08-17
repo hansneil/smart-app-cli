@@ -9,7 +9,9 @@ const prompt = require('inquirer').prompt;
 const Metalsmith = require('metalsmith');
 const Handlebars = require('handlebars');
 const fse = require('fs-extra');
+
 const git = require('../utils/git');
+const {log, chalk} = require('../utils/log');
 
 const option = program.parse(process.argv).args[1];
 const defaultName = typeof option === 'string' ? option : 'swan-project';
@@ -126,7 +128,10 @@ module.exports = () => {
                         console.error(err);
                     }
                     else {
-                        console.log('创建成功，请在开发者工具中打开');
+                        log(chalk.green('^.^ 创建成功，请在开发者工具中打开'));
+                        log(chalk.green(`\n\t cd ${res.name}`));
+                        log(chalk.green('\t swan create-page (新增页面)'));
+                        log(chalk.green('\t swan create-component (新增组件)'));
                     }
                 });
         });

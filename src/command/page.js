@@ -8,8 +8,11 @@ const path = require('path');
 const prompt = require('inquirer').prompt;
 const Metalsmith = require('metalsmith');
 const Handlebars = require('handlebars');
-const git = require('../utils/git');
 const fse = require('fs-extra');
+
+const git = require('../utils/git');
+const {log, chalk} = require('../utils/log');
+const checkDir = require('../utils/check-dir');
 
 const option = program.parse(process.argv).args[1];
 const defaultName = typeof option === 'string' ? option : 'index';
@@ -74,7 +77,7 @@ function getPromptQuestions(name, email) {
         {
             type: 'input',
             name: 'barTitle',
-            message: '页面标题',
+            message: 'Page Title',
             default: '子页面标题',
             filter(val) {
                 return val.trim();
@@ -90,50 +93,59 @@ function getPromptQuestions(name, email) {
 }
 
 module.exports = () => {
-    git().then(({name, email}) => {
-        let promptQuestions = getPromptQuestions(name, email);
+    checkDir('pages').then(() => {
+        git().then(({name, email}) => {
+            let promptQuestions = getPromptQuestions(name, email);
 
-        return prompt(promptQuestions).then(res => {
-            let promise = new Promise((resolve, reject) => {
-                Metalsmith(path.join(__dirname, '../../'))
-                .source('./templates/page')
-                .destination(path.join(process.cwd(), 'pages/', res.filename))
-                .metadata(res)
-                .use((files, metalsmith, done) => {
-                    const meta = metalsmith.metadata();
-                    Object.keys(files).forEach(filename => {
-                        const t = files[filename].contents.toString();
-                        files[filename].contents = Buffer.from(Handlebars.compile(t)(meta));
+            return prompt(promptQuestions).then(res => {
+                let promise = new Promise((resolve, reject) => {
+                    Metalsmith(path.join(__dirname, '../../'))
+                    .source('./templates/page')
+                    .destination(path.join(process.cwd(), 'pages/', res.filename))
+                    .metadata(res)
+                    .use((files, metalsmith, done) => {
+                        const meta = metalsmith.metadata();
+                        Object.keys(files).forEach(filename => {
+                            const t = files[filename].contents.toString();
+                            files[filename].contents = Buffer.from(Handlebars.compile(t)(meta));
 
-                        let newFilename = filename.replace(oldName, res.filename);
-                        if (newFilename === filename) {
-                            return;
+                            let newFilename = filename.replace(oldName, res.filename);
+                            if (newFilename === filename) {
+                                return;
+                            }
+
+                            files[newFilename] = files[filename];
+                            delete files[filename];
+                        });
+                        done();
+                    }).build(err => {
+                        if (err) {
+                            console.error(err);
                         }
-
-                        files[newFilename] = files[filename];
-                        delete files[filename];
+                        else {
+                            log(chalk.green('页面创建成功'));
+                            resolve(`pages/${res.filename}/${res.filename}`);
+                        }
                     });
-                    done();
-                }).build(err => {
-                    if (err) {
-                        console.error(err);
-                    }
-                    else {
-                        console.log('页面创建成功');
-                        resolve(`pages/${res.filename}/${res.filename}`);
-                    }
                 });
-            });
 
-            return promise;
+                return promise;
+            });
+        }).then(createPath => {
+            const cwd = process.cwd();
+            const jsonPath = path.join(cwd, 'app.json');
+            if (!fse.pathExistsSync(jsonPath)) {
+                log(chalk.red('app.json 不存在，无法自动更新，请检查是否位于小程序根目录'));
+            }
+            else {
+                let appJson = fse.readJSONSync(jsonPath);
+                appJson.pages = appJson.pages.concat(createPath);
+                fse.outputJsonSync(jsonPath, appJson, {
+                    spaces: 4
+                });
+            }
         });
-    }).then(createPath => {
-        const cwd = process.cwd();
-        const jsonPath = path.join(cwd, 'app.json');
-        let appJson = fse.readJSONSync(jsonPath);
-        appJson.pages = appJson.pages.concat(createPath);
-        fse.outputJsonSync(jsonPath, appJson, {
-            spaces: 4
-        });
+    }, () => {
+        log(chalk.yellow('create component aborted'));
     });
 };

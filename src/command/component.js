@@ -8,8 +8,11 @@ const path = require('path');
 const prompt = require('inquirer').prompt;
 const Metalsmith = require('metalsmith');
 const Handlebars = require('handlebars');
-const git = require('../utils/git');
 const fse = require('fs-extra');
+
+const git = require('../utils/git');
+const checkDir = require('../utils/check-dir');
+const {log, chalk} = require('../utils/log');
 
 const option = program.parse(process.argv).args[1];
 const defaultName = typeof option === 'string' ? option : 'component';
@@ -75,37 +78,41 @@ function getPromptQuestions(name, email) {
 }
 
 module.exports = () => {
-    git().then(({name, email}) => {
-        let promptQuestions = getPromptQuestions(name, email);
+    checkDir('components').then(() => {
+        git().then(({name, email}) => {
+            let promptQuestions = getPromptQuestions(name, email);
 
-        prompt(promptQuestions).then(res => {
-            Metalsmith(path.join(__dirname, '../../'))
-            .source('./templates/component')
-            .destination(path.join(process.cwd(), 'components', res.filename))
-            .metadata(res)
-            .use((files, metalsmith, done) => {
-                const meta = metalsmith.metadata();
-                Object.keys(files).forEach(filename => {
-                    const t = files[filename].contents.toString();
-                    files[filename].contents = Buffer.from(Handlebars.compile(t)(meta));
+            prompt(promptQuestions).then(res => {
+                Metalsmith(path.join(__dirname, '../../'))
+                .source('./templates/component')
+                .destination(path.join(process.cwd(), 'components', res.filename))
+                .metadata(res)
+                .use((files, metalsmith, done) => {
+                    const meta = metalsmith.metadata();
+                    Object.keys(files).forEach(filename => {
+                        const t = files[filename].contents.toString();
+                        files[filename].contents = Buffer.from(Handlebars.compile(t)(meta));
 
-                    let newFilename = filename.replace(oldName, res.filename);
-                    if (newFilename === filename) {
-                        return;
+                        let newFilename = filename.replace(oldName, res.filename);
+                        if (newFilename === filename) {
+                            return;
+                        }
+
+                        files[newFilename] = files[filename];
+                        delete files[filename];
+                    });
+                    done();
+                }).build(err => {
+                    if (err) {
+                        console.error(err);
                     }
-
-                    files[newFilename] = files[filename];
-                    delete files[filename];
+                    else {
+                        log(chalk.green('自定义组件创建成功'));
+                    }
                 });
-                done();
-            }).build(err => {
-                if (err) {
-                    console.error(err);
-                }
-                else {
-                    console.log('自定义组件创建成功');
-                }
             });
         });
+    }, () => {
+        log(chalk.yellow('create component aborted'));
     });
 };
