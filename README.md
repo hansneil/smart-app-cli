@@ -4,7 +4,7 @@
 ### 安装 (installation)
 
 ```
-    npm istall -g swan-cli
+    npm install -g swan-cli
 ```
 
 ### 命令 (commander)
