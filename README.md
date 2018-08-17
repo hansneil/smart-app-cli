@@ -1,10 +1,10 @@
-# swan-cli
+# smart-app-cli
 智能小程序脚手架
 
 ### 安装 (installation)
 
 ```
-    npm install -g swan-cli
+    npm install -g smart-app-cli
 ```
 
 ### 命令 (commander)

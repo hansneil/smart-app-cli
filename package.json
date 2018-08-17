@@ -1,11 +1,10 @@
 {
-  "name": "swan-cli",
+  "name": "smart-app-cli",
   "version": "1.0.0",
-  "description": "smart app cli",
+  "description": "智能小程序脚手架",
   "bin": {
     "swan": "./bin/swan"
   },
-  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
