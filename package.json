@@ -20,5 +20,13 @@
     "inquirer": "^6.1.0",
     "metalsmith": "^2.3.0",
     "prompt": "^1.0.0"
-  }
+  },
+  "keywords": [
+    "swan",
+    "smart-app",
+    "cli",
+    "baidu",
+    "san",
+    "tool"
+  ]
 }
