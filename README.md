@@ -1,7 +1,7 @@
 # swan-cli
 智能小程序脚手架
 
-### 安装 (installation)
+### 安装 (installation)
 
 ```
     npm istall -g swan-cli
