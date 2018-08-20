@@ -1,6 +1,6 @@
 {
   "name": "smart-app-cli",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "智能小程序脚手架",
   "bin": {
     "swan": "./bin/swan"
@@ -20,6 +20,10 @@
     "inquirer": "^6.1.0",
     "metalsmith": "^2.3.0",
     "prompt": "^1.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:hansneil/smart-app-cli.git"
   },
   "keywords": [
     "swan",

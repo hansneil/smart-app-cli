@@ -7,7 +7,7 @@
     npm install -g smart-app-cli
 ```
 
-### 命令 (commander)
+### 命令 (command)
 
 ```
     swan init [project-name]  新建智能小程序项目

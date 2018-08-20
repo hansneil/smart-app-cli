@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 
-const init = require('../src/command/init');
-const page = require('../src/command/page');
-const component = require('../src/command/component');
-
 const version = require('../package').version;
-
 const program = require('commander');
 
 program.version(version);
+
+// fix bug
+
+const init = require('../src/command/init');
+const page = require('../src/command/page');
+const component = require('../src/command/component');
 
 // init
 program
