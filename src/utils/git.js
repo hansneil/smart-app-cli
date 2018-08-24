@@ -5,15 +5,15 @@
 
 let exec = require('child_process').exec;
 
-module.exports = function () {
+module.exports = () => {
     return Promise.all([
         'git config --get user.name',
         'git config --get user.email'
-    ].map(function (cmd) {
-        return new Promise(function (resolve) {
+    ].map(cmd => {
+        return new Promise(resolve => {
             exec(cmd, {
                 cwd: __dirname
-            }, function (error, stdout, stderr) {
+            }, (error, stdout, stderr) => {
                 if (error) {
                     throw error;
                 }
@@ -21,10 +21,10 @@ module.exports = function () {
                 resolve(stdout.trim());
             });
         });
-    })).then(function (info) {
+    })).then(([name, email]) => {
         return {
-            name: info[0],
-            email: info[1]
+            name,
+            email
         };
     });
 };

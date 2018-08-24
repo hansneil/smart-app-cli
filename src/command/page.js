@@ -14,8 +14,11 @@ const git = require('../utils/git');
 const {log, chalk} = require('../utils/log');
 const checkDir = require('../utils/check-dir');
 
+// 默认页面名
+const DEFAULT_NAME = 'index';
+
 const option = program.parse(process.argv).args[1];
-const defaultName = typeof option === 'string' ? option : 'index';
+const defaultName = typeof option === 'string' ? option : DEFAULT_NAME;
 
 const oldName = 'page';
 
@@ -26,6 +29,9 @@ function getPromptQuestions(name, email) {
             name: 'filename',
             message: 'Filename',
             default: defaultName,
+            when() {
+                return defaultName === DEFAULT_NAME;
+            },
             filter(val) {
                 return val.trim();
             },
