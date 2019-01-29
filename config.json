@@ -1,0 +1,10 @@
+{
+	"user": {
+		"name": false,
+		"email": false
+	},
+	"default": {
+		"name": "admin",
+		"email": "admin@admin.com"
+	}
+}

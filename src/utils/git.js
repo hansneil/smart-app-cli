@@ -12,7 +12,7 @@ module.exports = () => {
     ].map(cmd => {
         return new Promise(resolve => {
             exec(cmd, {
-                cwd: __dirname
+                cwd: process.cwd()
             }, (error, stdout, stderr) => {
                 if (error) {
                     throw error;

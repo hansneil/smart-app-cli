@@ -10,7 +10,7 @@ const Metalsmith = require('metalsmith');
 const Handlebars = require('handlebars');
 const fse = require('fs-extra');
 
-const git = require('../utils/git');
+const user = require('../utils/user');
 const {log, chalk} = require('../utils/log');
 const checkDir = require('../utils/check-dir');
 
@@ -61,6 +61,7 @@ function getPromptQuestions(name, email) {
                 return validate || 'Please input author name';
             },
             transformer(val) {
+                val !== name && user.set('name', val);
                 return val;
             }
         },
@@ -77,6 +78,7 @@ function getPromptQuestions(name, email) {
                 return validate || 'Please input email address';
             },
             transformer(val) {
+                val !== email && user.set('email', val);
                 return val;
             }
         },
@@ -100,7 +102,7 @@ function getPromptQuestions(name, email) {
 
 module.exports = () => {
     checkDir('pages').then(() => {
-        git().then(({name, email}) => {
+        user.get().then(({name, email}) => {
             let promptQuestions = getPromptQuestions(name, email);
 
             return prompt(promptQuestions).then(res => {
