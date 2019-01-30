@@ -10,7 +10,7 @@ const prompt = require('inquirer').prompt;
 const Metalsmith = require('metalsmith');
 const Handlebars = require('handlebars');
 
-const git = require('../utils/git');
+const user = require('../utils/user');
 const {log, chalk} = require('../utils/log');
 
 // 默认工程名
@@ -23,8 +23,8 @@ const defaultName = typeof option === 'string' ? option : DEFAULT_NAME;
 /**
  * getPromptQuestions 获取问题
  *
- * @param {string} name git username
- * @param {string} email git email
+ * @param {string} name git|config username
+ * @param {string} email git|config email
  * @return {Array} 问题列表
  */
 function getPromptQuestions(name, email) {
@@ -97,6 +97,7 @@ function getPromptQuestions(name, email) {
                 return validate || 'Please input author name';
             },
             transformer(val) {
+                val !== name && user.set('name', val);
                 return val;
             }
         },
@@ -113,6 +114,7 @@ function getPromptQuestions(name, email) {
                 return validate || 'Please input email address';
             },
             transformer(val) {
+                val !== email && user.set('email', val);
                 return val;
             }
         }
@@ -120,7 +122,7 @@ function getPromptQuestions(name, email) {
 }
 
 module.exports = () => {
-    git().then(({name, email}) => {
+    user.get().then(({name, email}) => {
         let promptQuestions = getPromptQuestions(name, email);
 
         prompt(promptQuestions).then(res => {
